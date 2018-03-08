@@ -17,6 +17,10 @@
 ** On part du principe qu'un int fait 32 bits. Est-ce vrai chez vous ?
 */
 
+# include "header.h"
+# include "ins.h"
+# include "queue.h"
+
 # define NBR_OP                 16
 # define IND_SIZE				2
 # define REG_SIZE				4
@@ -73,11 +77,17 @@ typedef struct      s_op
     char            *op_name;
     int             nbr_params;
     t_arg_type      arg_type[3];
-    unsigned int    opcode;
-    unsigned int    nbr_cycle;
+    int             opcode;
+    int             nbr_cycle;
     char            *mnemonic;
-    unsigned int    has_abc;
-    unsigned int    truncate;
+    int             has_abc;
+    int             truncate;
 }                   t_op;
+
+t_ins   *get_ins(char *str, t_has_l_a *has_l_a);
+char    *get_op_str(char *str);
+t_ins   *get_params(char *str, int nbr_params, int op);
+char    *get_arg(char *str);
+int     get_op(char *str);
 
 #endif

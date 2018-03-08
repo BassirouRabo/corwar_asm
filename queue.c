@@ -1,24 +1,21 @@
 #include "queue.h"
 
-t_queue			*queue_new(t_has_l_a has_l_a, int size, char *acb, char *ins)
+t_queue			*queue_new(t_has_l_a *has_l_a, char *label, int size, t_ins *ins)
 {
 	t_queue	*node;
 
-	if (!acb)
+	if (!(node = (t_queue *)ft_memalloc(sizeof(t_queue))))
 		return (NULL);
-	if (!(node = ft_memalloc(sizeof(t_queue))))
-		return (NULL);
-	if (!(node->ins = ft_memalloc(ft_strlen(ins) + 1)))
-		return (NULL);
-    if (!(node->acb = ft_memalloc(ft_strlen(acb) + 1)))
+    if (!(node->label = ft_memalloc(ft_strlen(label) + 1)))
         return (NULL);
-	ft_strcpy(node->ins, (const char*)ins);
-    ft_strcpy(node->acb, (const char*)acb);
-    node->has_l_a.l = has_l_a.l ? has_l_a.l : FALSE;
-    node->has_l_a.a = has_l_a.a ? has_l_a.a : FALSE;
-	node->size = size;
-	node->next = NULL;
-	return (node);
+    if (!(node->has_l_a = (t_has_l_a *)ft_memalloc(sizeof(t_has_l_a))))
+        return (NULL);
+    node->has_l_a->has_label = has_l_a->has_label;
+    node->has_l_a->has_abc = has_l_a->has_abc;
+    ft_strncpy(node->label, (const char*)label, ft_strlen(label));
+    node->ins = ins;
+    node->next = NULL;
+    return (node);
 }
 
 t_queue			*queue_enqueue(t_queue *head, t_queue *node)
@@ -44,23 +41,21 @@ t_queue			*queue_dequeue(t_queue *head)
 		return (NULL);
 	if (!head->next)
 	{
-		ft_strdel(&head->ins);
-		ft_strdel(&head->acb);
+        ins_free(head->ins);
 		ft_memdel((void **)&head);
 		return (NULL);
 	}
 	cpy = head;
 	while (head->next->next)
 		head = head->next;
-    ft_strdel(&head->next->ins);
-	ft_strdel(&head->next->acb);
+    ins_free(head->ins);
 	ft_memdel((void **)head->next);
 	return (cpy);
 }
 
 int				queue_len(t_queue *head)
 {
-	int		i;
+	int i;
 
 	i = 0;
 	while (head)
@@ -73,11 +68,11 @@ int				queue_len(t_queue *head)
 
 int				queue_find(t_queue *head, char *acb)
 {
-	while (head)
+	/*while (head)
 	{
 		if (!ft_strcmp(head->acb, acb))
 			return (1);
 		head = head->next;
-	}
+	}*/
 	return (0);
 }

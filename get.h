@@ -5,8 +5,9 @@
 # include "queue.h"
 # include "utils.h"
 # include "set.h"
+# include "op.h"
 
-int     get_header(header_t *header, char *str);
-t_queue *get_instrucions(t_queue **labels, char *str);
+int         get_header(header_t *header, char *str);
+t_queue     *get_instruction(char *str);
 
 #endif

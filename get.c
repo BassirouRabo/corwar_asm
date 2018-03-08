@@ -1,6 +1,6 @@
 #include "get.h"
 
-int     get_header(header_t *header, char *str)
+int         get_header(header_t *header, char *str)
 {
     // TODO free res
     char *res;
@@ -20,18 +20,31 @@ int     get_header(header_t *header, char *str)
     return (ONE);
 }
 
-t_queue *get_instrucions(t_queue **labels, char *str)
+t_queue     *get_instruction(char *str)
 {
-    t_queue *node;
-    int     res;
+    t_queue     *node;
+    int         res;
+    char        *label;
+    t_has_l_a   *has_l_a;
+    t_ins       *ins;
 
     res = 0;
+    label = NULL;
+    if (!(has_l_a = (t_has_l_a *)ft_memalloc(sizeof(t_has_l_a))))
+        return (NULL);
+    has_l_a->has_label = FALSE;
+    while (str && *str && (*str == '\t' || *str == ' '))
+        str++;
     if ((res = has_label(str)))
-        printf("{%d}\t%s\n", res, str);
-
-
-    //printf("%s\n", str);
-  //  node = queue_new(NULL, NULL,)
-   // printf("%d\n", queue_len(*labels));
-    return (NULL);
+    {
+        if (!(label = ft_memalloc(res + 1)) || !(label = ft_strncpy(label, str, res)))
+            return (NULL);
+        str = str + res + 1;
+        while (str && *str && (*str == '\t' || *str == ' '))
+            str++;
+        has_l_a->has_label = TRUE;
+    }
+    if (str && *str && !(ins = get_ins(str, has_l_a)))
+        return (NULL);
+    return (queue_new(has_l_a, label, 0, ins));
 }

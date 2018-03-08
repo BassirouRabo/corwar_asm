@@ -2,12 +2,13 @@
 
 void    parse_file(const int fd, header_t **header, char *str)
 {
-    t_queue   *queue;
+    t_queue     *head;
+    t_queue     *node;
 
-    queue = NULL;
+    head = NULL;
     while (get_next_line(fd, &str) > ZERO)
     {
-        while (str && *str && *str == ' ')
+        while (str && *str && (*str == ' ' || *str == '\t'))
             str++;
         if (str && *str &&
                 (!ft_strncmp(str, NAME_CMD_STRING, ft_strlen(NAME_CMD_STRING))
@@ -15,14 +16,17 @@ void    parse_file(const int fd, header_t **header, char *str)
         {
             if (!get_header(*header, str) && return_error(header))
                 return ;
-            continue ;
         }
-        if (str && *str && *str == COMMENT_CHAR)
+        else if (str && *str && *str == COMMENT_CHAR)
             continue ;
-        if (str && *str && (queue = get_instrucions(&queue, str)) && return_error(header))
+        else if (str && *str)
+        {
+            if (!(node = get_instruction(str)) && return_error(header))
                 return ;
+            head = queue_enqueue(head, node);
+        }
     }
-    asm_file(fd, queue);
+    assemble(head, header);
 }
 
 int     main(int argc, char **argv)
@@ -38,7 +42,7 @@ int     main(int argc, char **argv)
     argv++;
     while (argc--)
     {
-        if (!(header = ft_memalloc(sizeof(header_t *)))
+        if (!(header = (header_t *)ft_memalloc(sizeof(header_t)))
             && return_error(&header))
             exit(MINUS);
         if ((fd = open(argv[i++], O_RDONLY)) == MINUS && return_error(&header))

@@ -3,7 +3,6 @@
 
 # include <stdio.h>
 # include "libft/libft.h"
-# include "op.h"
 
 typedef enum        e_bool
 {

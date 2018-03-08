@@ -3,7 +3,8 @@
 
 # include "header.h"
 # include "queue.h"
+# include "op.h"
 
-void        asm_file(const int fd, t_queue   *labels);
+void        assemble(t_queue *t_queue, header_t **header);
 
 #endif
